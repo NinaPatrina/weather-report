@@ -45,8 +45,7 @@ h1{font-size: 3rem;}
 h4{font-size: 2rem;}
 
 h3{margin: 5px;
-    border: #0e1538;
-border-color: var(--dark);
+    
 }
 
 
@@ -105,27 +104,27 @@ border-color: var(--dark);
 .winter{
     background-image: url("/assets/winter.jpg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 }
 .spring{
     background-image: url("/assets/spring.jpg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 
 }
 .summer{
     background-image: url("/assets/summer.jpg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 
 }
 .autumn{
     background-image: url("/assets/autumn.jpg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 }
 #day__forecast{

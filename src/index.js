@@ -1,4 +1,6 @@
 'use strict';
+import 'regenerator-runtime/runtime';
+import axios from 'axios';
 
 // 2. Change temperature by clicking on an arrow
 
@@ -206,7 +208,7 @@ document.addEventListener(
 
 const ResetCity = () => {
   const nameContainer = document.getElementById('city_name');
-  nameContainer.textContent = 'default name';
+  nameContainer.textContent = 'Far Far Away';
 };
 
 const registerEventHandlersReset = () => {
