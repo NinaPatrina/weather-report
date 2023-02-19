@@ -1,6 +1,6 @@
 'use strict';
-import 'regenerator-runtime/runtime';
-import axios from 'axios';
+// import 'regenerator-runtime/runtime';
+// import axios from 'axios';
 
 // 2. Change temperature by clicking on an arrow
 
@@ -83,22 +83,16 @@ const changeColorTemp = (temp) => {
 
 // 3. Naming the City
 
-const RenameCity = () => {
-  const result = document.getElementById('city_name');
-  console.log('1');
-  result.textContent = this.value.charAt(0).toUpperCase() + this.value.slice(1);
-  console.log(result.textContent);
-  console.log(result);
+const result = document.getElementById('city_name');
+const RenameCity = (e) => {
+  result.textContent =
+    e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
 };
 
 const registerEventHandlersRename = () => {
   const message = document.getElementById('enter_city');
-  console.log('2');
-  console.log(message);
   message.addEventListener('input', RenameCity);
 };
-console.log('3');
-
 document.addEventListener('DOMContentLoaded', registerEventHandlersRename);
 
 // 4. calling APIs LocationIQ and OpenWeather
