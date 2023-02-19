@@ -94,7 +94,7 @@ message.addEventListener('input', function () {
 
 const getRealTemp = () => {
   axios
-    .get('https://secret-citadel-42185.herokuapp.com/location', {
+    .get('https://weather-report-proxyserver.herokuapp.com/location', {
       params: {
         q: document.getElementById('enter_city').value,
       },
@@ -103,7 +103,7 @@ const getRealTemp = () => {
       const forecastFor = document.getElementById('forecast');
       forecastFor.textContent = `Forecast for: ${response.data[0].display_name}`;
       axios
-        .get('https://secret-citadel-42185.herokuapp.com/weather', {
+        .get('https://weather-report-proxyserver.herokuapp.com/weather', {
           params: {
             lat: response.data[0].lat,
             lon: response.data[0].lon,
@@ -166,29 +166,6 @@ const Forecast = (data) => {
 };
 
 // 5. Selection Changes Sky Background
-
-const changeModeSky = (event) => {
-  const skyMode = document.getElementById('sky-select');
-  const skyText = skyMode.options[skyMode.selectedIndex].text;
-  const element = document.querySelector('#block__right__name > h4');
-  if (skyText == 'Sunny') {
-    element.textContent = '☁️ ☁️ ☁️ ☀️ ☁️ ☁️';
-  } else if (skyText == 'Cloudy') {
-    element.textContent = '☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️';
-  } else if (skyText == 'Rainy') {
-    element.textContent = '🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧';
-  } else if (skyText == 'Snowy') {
-    element.textContent = '🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨';
-  } else {
-    element.textContent = 'Weather Garden';
-  }
-};
-
-const registerEventHandlersSky = () => {
-  const skyMode = document.getElementById('sky-select');
-  skyMode.addEventListener('change', changeModeSky);
-};
-document.addEventListener('DOMContentLoaded', registerEventHandlersSky);
 
 const changeModeSkyBackground = (event) => {
   const element = document.body;
