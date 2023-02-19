@@ -82,17 +82,22 @@ const changeColorTemp = (temp) => {
 };
 
 // 3. Naming the City
-//! used different syntax here
 
-const message = document.getElementById('enter_city');
-const result = document.getElementById('city_name');
-message.addEventListener('input', function () {
+const RenameCity = () => {
+  const result = document.getElementById('city_name');
   result.textContent = this.value.charAt(0).toUpperCase() + this.value.slice(1);
-});
+};
+
+const registerEventHandlersRename = () => {
+  const message = document.getElementById('enter_city');
+  message.addEventListener('input', RenameCity);
+};
+document.addEventListener('DOMContentLoaded', registerEventHandlersRename);
 
 // 4. calling APIs LocationIQ and OpenWeather
 
 const getRealTemp = () => {
+  console.log('sending request');
   axios
     .get('https://weather-report-proxyserver.herokuapp.com/location', {
       params: {
@@ -101,6 +106,7 @@ const getRealTemp = () => {
     })
     .then((response) => {
       const forecastFor = document.getElementById('forecast');
+      console.log(response.data);
       forecastFor.textContent = `Forecast for: ${response.data[0].display_name}`;
       axios
         .get('https://weather-report-proxyserver.herokuapp.com/weather', {
@@ -111,6 +117,7 @@ const getRealTemp = () => {
         })
         .then((response) => {
           Forecast(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.log('error!', error.response);
