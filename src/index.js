@@ -8,12 +8,10 @@ const state = {
   temp: 55,
 };
 let flagFahrenheit = true;
-const today = new Date();
 
 const increaseTemp = () => {
   state.temp += 1;
   const tempContainer = document.getElementById('current_temp');
-  tempContainer.textContent = `Current temp: ${state.temp}`;
   tempContainer.textContent = flagFahrenheit
     ? `${Math.trunc(state.temp)}°F`
     : `${Math.trunc(state.temp)}°C`;
@@ -24,6 +22,8 @@ const increaseTemp = () => {
 const registerEventHandlers = () => {
   const increaseTempButton = document.getElementById('increaseTempButton');
   increaseTempButton.addEventListener('click', increaseTemp);
+  const decreaseTempButton = document.getElementById('decreaseTempButton');
+  decreaseTempButton.addEventListener('click', decreaseTemp);
 };
 document.addEventListener('DOMContentLoaded', registerEventHandlers);
 
@@ -96,7 +96,6 @@ const registerEventHandlersRename = () => {
 document.addEventListener('DOMContentLoaded', registerEventHandlersRename);
 
 // 4. calling APIs LocationIQ and OpenWeather
-
 const getRealTemp = () => {
   console.log('sending request');
   axios
@@ -107,7 +106,7 @@ const getRealTemp = () => {
     })
     .then((response) => {
       const forecastFor = document.getElementById('forecast');
-      console.log(response.data);
+      // console.log(response.data);
       forecastFor.textContent = `Forecast for: ${response.data[0].display_name}`;
       axios
         .get('https://weather-report-proxyserver.herokuapp.com/weather', {
@@ -123,12 +122,29 @@ const getRealTemp = () => {
         .catch((error) => {
           console.log('error!', error.response);
         });
-    })
-    .catch((error) => {
-      console.log('error!', error.response);
+      axios
+        .get(`https://weather-report-proxyserver.herokuapp.com/photo`, {
+          params: {
+            lat: response.data[0].lat,
+            lon: response.data[0].lon,
+            keyword: response.data[0].display_name.split(',')[0],
+          },
+        })
+        .then((response) => {
+          console.log(response);
+
+          console.log(response.data.results[0].photos[0].photo_reference);
+
+          let checkedPhoto = response.data.results[0].photos[0].photo_reference;
+          document.getElementById(
+            'imgid'
+          ).src = `https://maps.googleapis.com/maps/api/place/photo?maxheight=400&maxwidth=1000&photoreference=${checkedPhoto}&key=${GOOGLE_API}`;
+        })
+        .catch((error) => {
+          console.log('error2!', error.response);
+        });
     });
 };
-
 const registerEventHandlersReal = () => {
   const getRealTempBtn = document.getElementById('get__real__temp');
   getRealTempBtn.addEventListener('click', getRealTemp);
@@ -136,33 +152,46 @@ const registerEventHandlersReal = () => {
 document.addEventListener('DOMContentLoaded', registerEventHandlersReal);
 
 const Forecast = (data) => {
-  flagFahrenheit = true;
-  state.temp = data.current.temp;
+  const today = new Date();
+  if (!flagFahrenheit) {
+    state.temp = (5 / 9) * (data.current.temp - 32);
+  } else {
+    state.temp = data.current.temp;
+  }
   const tempContainer = document.getElementById('current_temp');
-  tempContainer.textContent = `${Math.trunc(state.temp)}°F`;
+  tempContainer.textContent = flagFahrenheit
+    ? `${Math.trunc(state.temp)}°F`
+    : `${Math.trunc(state.temp)}°C`;
   changeColorTemp(state.temp);
   changeBackground(state.temp);
   const taskList = document.getElementById('day__forecast');
   taskList.innerHTML = '';
+
   // forecast for a week
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 0; i <= 7; i++) {
     const listItem = document.createElement('li');
-    today.setDate(today.getDate() + 1);
 
     listItem.textContent = today.toDateString();
     listItem.className = 'date';
     taskList.appendChild(listItem);
+    today.setDate(today.getDate() + 1);
 
     const list = document.createElement('ol');
     listItem.appendChild(list);
 
     const dayTemp = document.createElement('li');
-    dayTemp.textContent = `day temp: ${data.daily[i].temp.day}°F`;
+    dayTemp.textContent = flagFahrenheit
+      ? `day temp: ${Math.trunc(data.daily[i].temp.day)}°F`
+      : `day temp: ${Math.trunc((5 / 9) * (data.daily[i].temp.day - 32))}°C`;
     dayTemp.className = 'data';
     list.appendChild(dayTemp);
 
     const nightTemp = document.createElement('li');
-    nightTemp.textContent = `night temp: ${data.daily[i].temp.night}°F`;
+    nightTemp.textContent = flagFahrenheit
+      ? `night temp: ${Math.trunc(data.daily[i].temp.night)}°F`
+      : `night temp: ${Math.trunc(
+          (5 / 9) * (data.daily[i].temp.night - 32)
+        )}°C`;
     nightTemp.className = 'data';
     list.appendChild(nightTemp);
 
@@ -170,6 +199,15 @@ const Forecast = (data) => {
     description.textContent = `${data.daily[i]['weather'][0].description}`;
     description.className = 'data';
     list.appendChild(description);
+  }
+  if (data.daily[0]['weather'][0].description.includes('snow')) {
+    document.body.className = 'snow-bg';
+  } else if (data.daily[0]['weather'][0].description.includes('rain')) {
+    document.body.className = 'rain';
+  } else if (data.daily[0]['weather'][0].description.includes('cloud')) {
+    document.body.className = 'cloud';
+  } else if (data.daily[0]['weather'][0].description.includes('clear')) {
+    document.body.className = 'sun';
   }
 };
 

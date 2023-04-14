@@ -26,7 +26,7 @@ body {
 header {
     padding: 1rem 1rem;
 }    
-img{
+#globe{
     width:90px
 }
 
@@ -102,27 +102,27 @@ h3{margin: 5px;
     margin:30px;
 }
 .winter{
-    background-image: url("/assets/winter.jpeg");
+    background-image: url("../assets/winter.jpeg");
     background-repeat: no-repeat;
     background-size: contain;
     transition: background-image linear 2s;
 }
 .spring{
-    background-image: url("/assets/spring.jpeg");
+    background-image: url("../assets/spring.jpeg");
     background-repeat: no-repeat;
     background-size: contain;
     transition: background-image linear 2s;
 
 }
 .summer{
-    background-image: url("/assets/summer.jpeg");
+    background-image: url("../assets/summer.jpeg");
     background-repeat: no-repeat;
     background-size: contain;
     transition: background-image linear 2s;
 
 }
 .autumn{
-    background-image: url("/assets/autumn.jpeg");
+    background-image: url("../assets/autumn.jpeg");
     background-repeat: no-repeat;
     background-size: contain;
     transition: background-image linear 2s;
