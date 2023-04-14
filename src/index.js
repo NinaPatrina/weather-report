@@ -138,7 +138,7 @@ const getRealTemp = () => {
           let checkedPhoto = response.data.results[0].photos[0].photo_reference;
           document.getElementById(
             'imgid'
-          ).src = `https://maps.googleapis.com/maps/api/place/photo?maxheight=400&maxwidth=1000&photoreference=${checkedPhoto}&key=${GOOGLE_API}`;
+          ).src = `https://maps.googleapis.com/maps/api/place/photo?maxheight=400&maxwidth=1000&photoreference=${checkedPhoto}&key=${process.env.GOOGLE_API}`;
         })
         .catch((error) => {
           console.log('error2!', error.response);
