@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', registerEventHandlersRename);
 
 // 4. calling APIs LocationIQ and OpenWeather
 const getRealTemp = () => {
-  console.log('sending request');
   axios
     .get('https://weather-report-proxyserver.herokuapp.com/location', {
       params: {
@@ -106,7 +105,7 @@ const getRealTemp = () => {
     })
     .then((response) => {
       const forecastFor = document.getElementById('forecast');
-      // console.log(response.data);
+      const city_full_name = response.data[0].display_name;
       forecastFor.textContent = `Forecast for: ${response.data[0].display_name}`;
       axios
         .get('https://weather-report-proxyserver.herokuapp.com/weather', {
@@ -117,28 +116,21 @@ const getRealTemp = () => {
         })
         .then((response) => {
           Forecast(response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           console.log('error!', error.response);
         });
       axios
-        .get(`https://weather-report-proxyserver.herokuapp.com/photo`, {
+        .get(`https://www.googleapis.com/customsearch/v1`, {
           params: {
-            lat: response.data[0].lat,
-            lon: response.data[0].lon,
-            keyword: response.data[0].display_name.split(',')[0],
+            key: process.env.GOOGLE_API,
+            cx: `74444ea6766c34614`,
+            searchType: `image`,
+            q: city_full_name,
           },
         })
         .then((response) => {
-          console.log(response);
-
-          console.log(response.data.results[0].photos[0].photo_reference);
-
-          let checkedPhoto = response.data.results[0].photos[0].photo_reference;
-          document.getElementById(
-            'imgid'
-          ).src = `https://maps.googleapis.com/maps/api/place/photo?maxheight=400&maxwidth=1000&photoreference=${checkedPhoto}&key=${process.env.GOOGLE_API}`;
+          document.getElementById('imgid').src = response.data.items[0].link;
         })
         .catch((error) => {
           console.log('error2!', error.response);
