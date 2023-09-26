@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="styles/snow.css">
     <link rel="stylesheet" href="styles/rain_sun.css">
     <link rel="stylesheet" href="styles/clouds.css">
-    <!-- bootstrap for buttons -->
-
+    <link rel="stylesheet" href="styles/select.css">
+    <link rel="stylesheet" href="styles/button.css">
 
     <title>Weather Report</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -25,10 +25,10 @@
     <header>
         <div class="container">
             <nav id="nav">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Rotating_earth_animated_transparent.gif"/>
+                <img id="globe" src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Rotating_earth_animated_transparent.gif"/>
                 <h1>Weather Report</h1>
                 <h2>For the lovely city of</h2>
-                <h1 id="city_name">default name</h1>
+                <h1 id="city_name">Far Far Away</h1>
             </nav>
         </div>
     </header>
@@ -39,51 +39,44 @@
             <div id="main__intro">
                 <div id="main__intro__left">
                     <div class="block__left">
-                        <h3 id="temperature">Current temperature</h3>
-                        <div id="switchBtnFarenheitCelsius">
-                            <button type="button" id="switchBtnFC">°C/°F</button>
-                        </div>
-                        <button type="button"  id="increaseTempButton">⬆️</button>
-                        <h3 id="current_temp" class="green">55 °F</h3>
-                        <button type="button"  id="decreaseTempButton">⬇️</button>
-                    </div>
-                    <div class="block__left">
-                        <h3 id="sky">Choose sky</h3>
-                        <label for="sky-select" > </label>
-                            <select name="skies" id="sky-select">
-                                <option value="">--Please choose an option--</option>
-                                <option value="sun">Sunny</option>
-                                <option value="cloud">Cloudy</option>
-                                <option value="rain">Rainy</option>
-                                <option value="snow-bg">Snowy</option>
-                            </select>
-                        <h3 id="sky">Choose background</h3>
-                        <label for="back-select" class="d-inline-block"></label>
-                            <select name="backgrounds" class="form-control" id="back-select">
-                                <option value="">--Please choose an option--</option>
-                                <option value="sun">Sunny</option>
-                                <option value="cloud">Cloudy</option>
-                                <option value="rain">Rainy</option>
-                                <option value="snow-bg">Snowy</option>
-                            </select>
-                    </div>
-                    <div class="block__left">
                         <h3>Enter City Name:</h3>
                         <form id="form">
                             <input type="input" id="enter_city">
-                            <button type="reset">Reset Name</button>
+                            <button type="reset" class="button-19" id="reset__name">Reset Name</button>
                         </form>
                     </div>
+                    <div class="block__left">
+                        <div id="switchBtnFarenheitCelsius">
+                            <button type="button" class="button-19" role="button" id="switchBtnFC">°C/°F</button>
+                        </div>
+                        <button type="button" class="button-19" id="increaseTempButton">⬆️</button>
+                        <h3 id="current_temp" class="green">55 °F</h3>
+                        <button type="button" class="button-19" id="decreaseTempButton">⬇️</button>
+                    </div>
+                    <div class="block__left">
+                        <h3 id="sky">Choose background</h3>
+                        <label for="back-select" ></label>
+                        <div class="box">
+                            <select name="backgrounds" class="form-control" id="back-select">
+                                <option value="">Backgrounds</option>
+                                <option value="sun">Sunny</option>
+                                <option value="cloud">Cloudy</option>
+                                <option value="rain">Rainy</option>
+                                <option value="snow-bg">Snowy</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div id="main__intro__right" class="winter">
+                <div id="main__intro__right" class="spring">
                     <div id="block__right__name">
                         <h3>Weather Garden</h3>
                         <h4>🌞</h4>
                     </div>
                 </div>
                 <div id="main__intro__forecast">
-                    <button type="submit" id="get__real__temp">Get Realtime Temperature</button>
+                    <button type="submit" class="button-19" id="get__real__temp">Get Realtime Temperature</button>
                     <h3 id="forecast">Forecast</h3>
+                    <img id="imgid" width="200"  src="assets/winter.jpeg" id="image" />
                     <section id="seven__day__forecast">
                         <ul id="day__forecast"></ul>
                     </section>
@@ -96,11 +89,12 @@
     <footer id="footer">
         <div class="container">
             <div id="footer__copyright">
-                &copy; 2022 Ada Developers Academy ✨ Nina Patrina ✨ Ying Goings ✨
+                &copy; 2022 Ada Developers Academy ✨ Nina Patrina ✨
             </div>
         </div>
     </footer>        
     <script src="src/index.js"></script>
+    <!-- <script src="./node_modules/axios/dist/axios.min.js"></script> -->
 </body>
 
 </html>

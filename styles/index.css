@@ -20,16 +20,13 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1500px;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin: 0 auto;
+    margin: 0;
     }    
 
 header {
-        padding: 1rem 0;
+    padding: 1rem 1rem;
 }    
-img{
+#globe{
     width:90px
 }
 
@@ -39,11 +36,16 @@ nav {
     align-items: baseline;
     height: 100%;
     justify-content: space-between;
+    padding-right: 5rem;
+    padding-left: 5rem;
 }
 
 h1{font-size: 3rem;}
 h4{font-size: 2rem;}
-h3{margin: 0;}
+
+h3{margin: 5px;
+
+}
 
 
 #current_temp{
@@ -55,6 +57,7 @@ h3{margin: 0;}
     display: flex;
     justify-content: space-between;
     padding-left: 1rem;
+    padding-right: 1rem;
     padding-top: 1rem;
     padding-bottom:80px;
 }
@@ -70,8 +73,19 @@ h3{margin: 0;}
     padding:40px;
     margin:30px;
 }  
+#enter_city{
+    background-color:rgb(174, 211, 222);
+    color: var(--dark);
+    padding: 12px;
+    width: 220px;
+    border: none;
+    font-size: 20px;
+    margin:5px;
+    box-shadow: 1px 5px 25px rgba(0, 0, 0, 0.2);
+    appearance: button;
+}
 #main__intro__right{
-    width:550px;
+    width:100%;
     border-radius: 10px;
     margin:30px;
     text-align: center;
@@ -88,29 +102,29 @@ h3{margin: 0;}
     margin:30px;
 }
 .winter{
-    background-image: url("/assets/winter.jpg");
+    background-image: url("../assets/winter.jpeg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 }
 .spring{
-    background-image: url("/assets/spring.jpg");
+    background-image: url("../assets/spring.jpeg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 
 }
 .summer{
-    background-image: url("/assets/summer.jpg");
+    background-image: url("../assets/summer.jpeg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 
 }
 .autumn{
-    background-image: url("/assets/autumn.jpg");
+    background-image: url("../assets/autumn.jpeg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     transition: background-image linear 2s;
 }
 #day__forecast{
@@ -134,19 +148,19 @@ li.data{
 }
 
 .green {
-    color: green;
+    color:darkolivegreen;
 }
 
 .yellow {
-    color: yellow;
+    color:darkgoldenrod;
 }
 
 .orange {
-    color: orange;
+    color:darksalmon;
 }
 
 .red {
-    color: red;
+    color:chocolate;
 }
 
 footer {

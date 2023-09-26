@@ -1,0 +1,23 @@
+/* select button designed by : FrankieDoodie */
+
+.box select {
+    background-color:rgb(174, 211, 222);
+    color: var(--dark);
+    padding: 12px;
+    width: 250px;
+    border: none;
+    font-size: 20px;
+    box-shadow: 1px 5px 25px rgba(0, 0, 0, 0.2);
+    appearance: button;
+    
+}
+
+  .box:hover::before {
+    color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .box select option {
+    padding: 30px;
+  }
+  

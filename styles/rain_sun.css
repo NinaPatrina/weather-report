@@ -9,10 +9,9 @@
 
 .sun {
     position: relative;
-    background: url("/assets/sunny.webp");
+    background: url("../assets/sunny.webp");
     background-size: cover;
     background-position: center;
-
 }    
 
 

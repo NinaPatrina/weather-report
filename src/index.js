@@ -8,12 +8,10 @@ const state = {
   temp: 55,
 };
 let flagFahrenheit = true;
-const today = new Date();
 
 const increaseTemp = () => {
   state.temp += 1;
   const tempContainer = document.getElementById('current_temp');
-  tempContainer.textContent = `Current temp: ${state.temp}`;
   tempContainer.textContent = flagFahrenheit
     ? `${Math.trunc(state.temp)}°F`
     : `${Math.trunc(state.temp)}°C`;
@@ -24,6 +22,8 @@ const increaseTemp = () => {
 const registerEventHandlers = () => {
   const increaseTempButton = document.getElementById('increaseTempButton');
   increaseTempButton.addEventListener('click', increaseTemp);
+  const decreaseTempButton = document.getElementById('decreaseTempButton');
+  decreaseTempButton.addEventListener('click', decreaseTemp);
 };
 document.addEventListener('DOMContentLoaded', registerEventHandlers);
 
@@ -53,9 +53,9 @@ const changeBackground = (temp) => {
   }
   if (temp >= 80) {
     element.className = 'summer';
-  } else if (temp < 80 && temp >= 70) {
+  } else if (temp < 80 && temp >= 54) {
     element.className = 'spring';
-  } else if (temp < 70 && temp >= 60) {
+  } else if (temp < 54 && temp >= 34) {
     element.className = 'autumn';
   } else {
     element.className = 'winter';
@@ -82,28 +82,33 @@ const changeColorTemp = (temp) => {
 };
 
 // 3. Naming the City
-//! used different syntax here
 
-const message = document.getElementById('enter_city');
 const result = document.getElementById('city_name');
-message.addEventListener('input', function () {
-  result.textContent = this.value.charAt(0).toUpperCase() + this.value.slice(1);
-});
+const RenameCity = (e) => {
+  result.textContent =
+    e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+};
+
+const registerEventHandlersRename = () => {
+  const message = document.getElementById('enter_city');
+  message.addEventListener('input', RenameCity);
+};
+document.addEventListener('DOMContentLoaded', registerEventHandlersRename);
 
 // 4. calling APIs LocationIQ and OpenWeather
-
 const getRealTemp = () => {
   axios
-    .get('http://127.0.0.1:5000/location', {
+    .get('https://weather-report-proxyserver.herokuapp.com/location', {
       params: {
         q: document.getElementById('enter_city').value,
       },
     })
     .then((response) => {
       const forecastFor = document.getElementById('forecast');
+      const city_full_name = response.data[0].display_name;
       forecastFor.textContent = `Forecast for: ${response.data[0].display_name}`;
       axios
-        .get('http://127.0.0.1:5000/weather', {
+        .get('https://weather-report-proxyserver.herokuapp.com/weather', {
           params: {
             lat: response.data[0].lat,
             lon: response.data[0].lon,
@@ -115,12 +120,23 @@ const getRealTemp = () => {
         .catch((error) => {
           console.log('error!', error.response);
         });
-    })
-    .catch((error) => {
-      console.log('error!', error.response);
+      axios
+        .get(`https://www.googleapis.com/customsearch/v1`, {
+          params: {
+            key: process.env.GOOGLE_API,
+            cx: `74444ea6766c34614`,
+            searchType: `image`,
+            q: city_full_name,
+          },
+        })
+        .then((response) => {
+          document.getElementById('imgid').src = response.data.items[0].link;
+        })
+        .catch((error) => {
+          console.log('error2!', error.response);
+        });
     });
 };
-
 const registerEventHandlersReal = () => {
   const getRealTempBtn = document.getElementById('get__real__temp');
   getRealTempBtn.addEventListener('click', getRealTemp);
@@ -128,33 +144,46 @@ const registerEventHandlersReal = () => {
 document.addEventListener('DOMContentLoaded', registerEventHandlersReal);
 
 const Forecast = (data) => {
-  flagFahrenheit = true;
-  state.temp = data.current.temp;
+  const today = new Date();
+  if (!flagFahrenheit) {
+    state.temp = (5 / 9) * (data.current.temp - 32);
+  } else {
+    state.temp = data.current.temp;
+  }
   const tempContainer = document.getElementById('current_temp');
-  tempContainer.textContent = `${Math.trunc(state.temp)}°F`;
+  tempContainer.textContent = flagFahrenheit
+    ? `${Math.trunc(state.temp)}°F`
+    : `${Math.trunc(state.temp)}°C`;
   changeColorTemp(state.temp);
   changeBackground(state.temp);
   const taskList = document.getElementById('day__forecast');
   taskList.innerHTML = '';
+
   // forecast for a week
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 0; i <= 7; i++) {
     const listItem = document.createElement('li');
-    today.setDate(today.getDate() + 1);
 
     listItem.textContent = today.toDateString();
     listItem.className = 'date';
     taskList.appendChild(listItem);
+    today.setDate(today.getDate() + 1);
 
     const list = document.createElement('ol');
     listItem.appendChild(list);
 
     const dayTemp = document.createElement('li');
-    dayTemp.textContent = `day temp: ${data.daily[i].temp.day}°F`;
+    dayTemp.textContent = flagFahrenheit
+      ? `day temp: ${Math.trunc(data.daily[i].temp.day)}°F`
+      : `day temp: ${Math.trunc((5 / 9) * (data.daily[i].temp.day - 32))}°C`;
     dayTemp.className = 'data';
     list.appendChild(dayTemp);
 
     const nightTemp = document.createElement('li');
-    nightTemp.textContent = `night temp: ${data.daily[i].temp.night}°F`;
+    nightTemp.textContent = flagFahrenheit
+      ? `night temp: ${Math.trunc(data.daily[i].temp.night)}°F`
+      : `night temp: ${Math.trunc(
+          (5 / 9) * (data.daily[i].temp.night - 32)
+        )}°C`;
     nightTemp.className = 'data';
     list.appendChild(nightTemp);
 
@@ -163,32 +192,18 @@ const Forecast = (data) => {
     description.className = 'data';
     list.appendChild(description);
   }
-};
-
-// 5. Selection Changes Sky Background
-
-const changeModeSky = (event) => {
-  const skyMode = document.getElementById('sky-select');
-  const skyText = skyMode.options[skyMode.selectedIndex].text;
-  const element = document.querySelector('#block__right__name > h4');
-  if (skyText == 'Sunny') {
-    element.textContent = '☁️ ☁️ ☁️ ☀️ ☁️ ☁️';
-  } else if (skyText == 'Cloudy') {
-    element.textContent = '☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️';
-  } else if (skyText == 'Rainy') {
-    element.textContent = '🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧';
-  } else if (skyText == 'Snowy') {
-    element.textContent = '🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨';
-  } else {
-    element.textContent = 'Weather Garden';
+  if (data.daily[0]['weather'][0].description.includes('snow')) {
+    document.body.className = 'snow-bg';
+  } else if (data.daily[0]['weather'][0].description.includes('rain')) {
+    document.body.className = 'rain';
+  } else if (data.daily[0]['weather'][0].description.includes('cloud')) {
+    document.body.className = 'cloud';
+  } else if (data.daily[0]['weather'][0].description.includes('clear')) {
+    document.body.className = 'sun';
   }
 };
 
-const registerEventHandlersSky = () => {
-  const skyMode = document.getElementById('sky-select');
-  skyMode.addEventListener('change', changeModeSky);
-};
-document.addEventListener('DOMContentLoaded', registerEventHandlersSky);
+// 5. Selection Changes Sky Background
 
 const changeModeSkyBackground = (event) => {
   const element = document.body;
@@ -208,7 +223,7 @@ document.addEventListener(
 
 const ResetCity = () => {
   const nameContainer = document.getElementById('city_name');
-  nameContainer.textContent = 'default name';
+  nameContainer.textContent = 'Far Far Away';
 };
 
 const registerEventHandlersReset = () => {
